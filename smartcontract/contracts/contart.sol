@@ -11,7 +11,6 @@ contract  contrat {
         string type_immoblier;
         string price;
         uint date;
-        bool completed;
     }
 
     mapping(uint => Task) public tasks;
@@ -23,15 +22,11 @@ contract  contrat {
         string type_immoblier,
          string price,
          uint date,
-        bool completed
     );
-    event taskCompleted(
-        uint id,
-        bool completed
-    );
+   
 
     constructor() public {
-        //createTask("My first smart contract", "nom","pppp", "ppppp");
+        //createTask("", "","", "");
     }
 
     function createTask(string memory _seller,string memory _buyer, string memory _type_immoblier, string memory  _price) public{
@@ -40,11 +35,5 @@ contract  contrat {
         emit TaskCreated(taskCount, _seller, _buyer, _type_immoblier, _price, now, false);
     }
 
-    function toggleCompleted(uint _id) public {
-        // "_" = local variable 
-        Task memory _task = tasks[_id];
-        _task.completed = !_task.completed;
-        tasks[_id] = _task;
-        emit taskCompleted(_id, _task.completed);
-    }
+   
 }
