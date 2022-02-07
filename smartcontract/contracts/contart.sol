@@ -21,7 +21,7 @@ contract  contrat {
         string buyer,
         string type_immoblier,
          string price,
-         uint date,
+         uint date
     );
    
 
@@ -31,8 +31,8 @@ contract  contrat {
 
     function createTask(string memory _seller,string memory _buyer, string memory _type_immoblier, string memory  _price) public{
         taskCount ++;
-        tasks[taskCount] = Task(taskCount, _seller, _buyer, _type_immoblier, _price, now, false);
-        emit TaskCreated(taskCount, _seller, _buyer, _type_immoblier, _price, now, false);
+        tasks[taskCount] = Task(taskCount, _seller, _buyer, _type_immoblier, _price, now);
+        emit TaskCreated(taskCount, _seller, _buyer, _type_immoblier, _price, now);
     }
 
    
