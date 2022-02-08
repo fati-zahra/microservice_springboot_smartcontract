@@ -79,51 +79,7 @@ public class AccountRestController {
         accountService.addRoleToUser(roleUserForm.getUsername(), roleUserForm.getRoleName());
     }
 
-    @GetMapping(path = "refreshToken")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String authorizationToken = request.getHeader(JWTUtils.AUTH_HEADER);
-        if(authorizationToken != null && authorizationToken.startsWith(JWTUtils.PREFIX)) {
-            try {
-                // verfiy the signature with the secret key
-                String jwtRefreshToken = authorizationToken.substring(7);
-                Algorithm algorithm = Algorithm.HMAC256(JWTUtils.SECRET);
-                JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = jwtVerifier.verify(jwtRefreshToken);
-
-                // if it's valid, proceed
-                String username = decodedJWT.getSubject();
-
-                // verify if the user token exists in the BLACK-LIST
-                AppUser appUser = accountService.loadUserByUsername(username);
-
-                // ACCESS TOKEN
-                String jwtAccessToken = JWT.create()
-                        .withSubject(appUser.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis()+JWTUtils.EXPIRE_ACCESS_TOKEN))
-                        .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", appUser.getAppRoles().stream().map(r -> r.getRoleName()).collect(Collectors.toList()))
-                        .sign(algorithm);
-
-                // TokenId = refresh-token + access-token
-                Map<String, String> idToken = new HashMap<>();
-                idToken.put("access-token", jwtAccessToken);
-                idToken.put("refresh-token", jwtRefreshToken);
-                response.setContentType("application/json");
-
-                new ObjectMapper().writeValue(response.getOutputStream(), idToken);
-
-            } catch(Exception e) {
-                throw e;
-            }
-        } else {
-            throw new RuntimeException("Refresh Token Required !");
-        }
-    }
-
-    @GetMapping(path = "profile")
-    public AppUser profile(Principal principal) {
-        return accountService.loadUserByUsername(principal.getName());
-    }
+    
 }
 
 @Data
