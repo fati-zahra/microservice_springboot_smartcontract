@@ -18,7 +18,6 @@ import com.example.demo.services.AccountService;
 
 
 @SpringBootApplication
-//to control roles access method 2
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class AuthServiceApplication {
 
@@ -28,8 +27,7 @@ public class AuthServiceApplication {
 
  @Bean
  PasswordEncoder passwordEncoder() {
-     // We are initializing PasswordEncoder bean in app context here to solve the circular dependency problem
-     // if we defined it in SecurityConfig It will produce the problem
+     
      return new BCryptPasswordEncoder();
  }
 
